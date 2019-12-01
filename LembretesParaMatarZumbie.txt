@@ -1,1 +1,57 @@
 ********************************* Teste para Zumbies *********************************
+
+***  Comandos para configurar os containers Docker ***
+
+docker pull postgres
+docker pull dpage/pgadmin4
+
+** criando rede
+docker network create --driver bridge skynet
+
+** subindo container com bd
+docker run --name pgdb --network=skynet -e "POSTEGRES_PASSWORD=qaninja" -p 5432:5423 -v var/lib/postgresql/data -d postgres
+
+** listar container
+docker ps
+
+	****** Subindo Banco de dados*********
+	  ** container do administrador do bd
+	  docker run --name pgadmin --network=skynet -p 15432:80 -e "PGADMIN_DEFAULT_EMAIL=root@qaninja.io" -e "PGADMIN_DEFAULT_PASSWORD=qaninja" -d dpage/pgadmin4
+
+  	  **Acessando pelo navegador
+	  http://192.168.99.100:15432/
+
+	  **rosteamento do banco de dados
+	  Abrir prompt de comando como admin
+	  ir nesse caminho C:\Windows\System32\drivers\etc>
+	  E digita notepad hosts
+	  Nesse arquivo que faço o hosteamento colocando os ips abaixo
+
+	  192.168.99.100 pgadmin
+	  192.168.99.100 pgdb
+
+	  Agora posso logar na web assim
+	  pgadmin:15432
+
+	****** Fim Subindo Banco de dados*********
+
+	****** Subindo API Zombie *********
+	  docker pull papitoio/zombie-api
+	  docker run --name zombie-api --network=skynet -e "DATABASE=pgdb" -p 3000:3000 -d papitoio/zombie-api
+
+	  ** Documentacção da API
+	  zombie-api:3000/apidoc
+
+	****** Fim Subindo API Zombie *********
+
+	******Subindo Front Zombie *********
+	  docker pull papitoio/zombie-web
+	  docker run --name zombie-web --network=skynet -e "VUE_APP_API=http://zombie-api:3000" -p 5000:5000 -d papitoio/zombie-web
+	  **Configurar tb no arquivo de hosts do notepad
+	  **Acessando o front
+	  http://zombie-web:5000/login
+
+
+
+docker pull papitoio/zombie-web
+
