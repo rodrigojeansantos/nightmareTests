@@ -14,7 +14,7 @@ docker run --name pgdb --network=skynet -e "POSTEGRES_PASSWORD=qaninja" -p 5432:
 ** listar container
 docker ps
 
-	****** Subindo Banco de dados*********
+	****** Configurar Banco de dados*********
 	  ** container do administrador do bd
 	  docker run --name pgadmin --network=skynet -p 15432:80 -e "PGADMIN_DEFAULT_EMAIL=root@qaninja.io" -e "PGADMIN_DEFAULT_PASSWORD=qaninja" -d dpage/pgadmin4
 
@@ -33,25 +33,76 @@ docker ps
 	  Agora posso logar na web assim
 	  pgadmin:15432
 
-	****** Fim Subindo Banco de dados*********
+	****** Fim Configurar Banco de dados*********
 
-	****** Subindo API Zombie *********
+	****** Configurar API Zombie *********
 	  docker pull papitoio/zombie-api
 	  docker run --name zombie-api --network=skynet -e "DATABASE=pgdb" -p 3000:3000 -d papitoio/zombie-api
 
 	  ** Documentacção da API
 	  zombie-api:3000/apidoc
 
-	****** Fim Subindo API Zombie *********
+	****** Fim Configurar API Zombie *********
 
-	******Subindo Front Zombie *********
+	******Configurar Front Zombie *********
 	  docker pull papitoio/zombie-web
 	  docker run --name zombie-web --network=skynet -e "VUE_APP_API=http://zombie-api:3000" -p 5000:5000 -d papitoio/zombie-web
 	  **Configurar tb no arquivo de hosts do notepad
 	  **Acessando o front
 	  http://zombie-web:5000/login
 
+	******fim Configurar Front Zombie *********
+
+	******Subir serviços depois de configurados Zombie *********
+	  docker start pgdb
+	  docker start pgadmin
+	  ​docker start zombie-api
+	  ​docker start zombie-web
+
+	  **** Removendo os Serviços ******
+		docker rm -f ​pgdb
+		docker rm -f ​pgadmin
+		docker rm -f ​zombie-api
+		docker rm -f ​zombie-web
+	  **** Fim Removendo os Serviços ****
+
+	******Fim Subir serviços depois de configurados Zombie *********
 
 
-docker pull papitoio/zombie-web
 
+
+	****** Nightwatch.js *********
+	  Só para aplicação Web, testes de ponta a ponta, end 2 end.
+	  Tem um executador de testes automatico, padrão page obj.
+	  Integração continua, relatorio padrão.
+
+	  *** Comandos ***
+	  '@disabled': true,   cancela um cenário de teste
+
+	  *** Instalando ****
+	    npm i nightwatch --save-dev
+	    Temos que configurar o nightwatch.json ou nightwatch.conf
+	    .\node_modules\.bin\nightwatch.cmd no package.json deixou como abaixo
+            "scripts": { "test": ".\\node_modules\\.bin\\nightwatch.cmd"},
+
+	*** COnfigurando o nightwatch.config ***
+	touch nightwatch.conf.js
+	PS: O chrome driver precisa da mesma versão do navegador para funcionar
+
+	Multiplos steps o end fica só no final
+
+	**** Executando ****
+	npm run test
+
+	**** Page Object ****
+	Encapsular os seletores dos elementos que representam uma pagina
+	No P.O para coisas globais não tem before e after só beforeEach e afterEach
+	E precisa de um callback para voltar e fechar
+
+	*** Cenarios independetes ***
+	Os cenarios são independentes, se tiver dependencia montamos em steps
+
+
+
+
+	  
