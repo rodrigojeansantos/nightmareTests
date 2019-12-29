@@ -1,5 +1,10 @@
 node_modules
+tests_output
+chromedriver.log
+geckodriver.log
 build
 npm-debug.log
+package-lock.json
+debug.log
 .env
 .DS_Store

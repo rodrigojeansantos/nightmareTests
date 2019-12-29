@@ -4,6 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "test:login": ".\\node_modules\\.bin\\nightwatch.cmd --group login",
+    "test:nologin": ".\\node_modules\\.bin\\nightwatch.cmd --skipgroup login",
+    "test:smoke": ".\\node_modules\\.bin\\nightwatch.cmd --tag smoke",
+    "stage:smoke": ".\\node_modules\\.bin\\nightwatch.cmd --tag smoke --env=stage",
+    "test:firefox": ".\\node_modules\\.bin\\nightwatch.cmd --tag smoke --env=firefox",
+    "test:headless": ".\\node_modules\\.bin\\nightwatch.cmd --tag smoke --env=headless",
+    "test:notag": ".\\node_modules\\.bin\\nightwatch.cmd --skiptag smoke, 404",
     "test": ".\\node_modules\\.bin\\nightwatch.cmd"
   },
   "keywords": [],
@@ -14,6 +21,8 @@
     "babel-plugin-add-module-exports": "^1.0.2",
     "babel-preset-es2015": "^6.24.1",
     "chromedriver": "^79.0.0",
-    "nightwatch": "^1.3.2"
+    "geckodriver": "^1.19.1",
+    "nightwatch": "^1.3.2",
+    "pg": "7.12.1"
   }
 }
